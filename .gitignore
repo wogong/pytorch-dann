@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# personal
+.idea
+.DS_Store
+main_legacy.py
