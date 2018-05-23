@@ -9,19 +9,27 @@ A pytorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 
 ## Environment
 
-- Python 2.7
-- PyTorch 0.3.1
+- Python 2.7/3.6
+- PyTorch 0.3.1post2
 
 ## Result
 
 results of the default `params.py`
 
-|                                    | MNIST (Source) | USPS (Target) |
+|                                    | SVHN (Source)  | MNIST (Target)|
 | :--------------------------------: | :------------: | :-----------: |
-| Source Classifier                  |   99.140000%   |  83.978495%   |
-| DANN                               |                |  97.634409%   |
+| Source Classifier                  |   92.92%   |  68.66%   |
+| DANN                               |                |  ----%   |
+
+## Other implementations
+
+- authors(caffe) <https://github.com/ddtm/caffe>
+- TensorFlow, <https://github.com/pumpikano/tf-dann>
+- Theano, <https://github.com/shucunt/domain_adaptation>
+- PyTorch, <https://github.com/fungtion/DANN>
 
 ## Credit
 
 - <https://github.com/fungtion/DANN>
 - <https://github.com/corenel/torchsharp>
+- <https://github.com/corenel/pytorch-starter-kit>
