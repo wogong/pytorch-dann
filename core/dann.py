@@ -7,37 +7,37 @@ import torch.optim as optim
 import params
 from utils import make_variable, save_model
 import numpy as np
-from core.test import eval
+from core.test import eval, eval_src
 
 import torch.backends.cudnn as cudnn
 cudnn.benchmark = True
 
-def train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
+def train_dann(model, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
     """Train dann."""
     ####################
     # 1. setup network #
     ####################
 
-    # set train state for Dropout and BN layers
-    dann.train()
-
     # setup criterion and optimizer
-    optimizer = optim.Adam(dann.parameters(), lr=params.lr)
+    parameter_list = [
+        {"params": model.features.parameters(), "lr": 1e-5},
+        {"params": model.classifier.parameters(), "lr": 1e-4},
+        {"params": model.discriminator.parameters(), "lr": 1e-4}
+    ]
+    optimizer = optim.Adam(parameter_list)
 
-    criterion = nn.NLLLoss()
+    criterion = nn.CrossEntropyLoss()
 
-    for p in dann.parameters():
+    for p in model.parameters():
         p.requires_grad = True
 
     ####################
     # 2. train network #
     ####################
 
-    # prepare domain label
-    label_src = make_variable(torch.zeros(params.batch_size).long())  # source 0
-    label_tgt = make_variable(torch.ones(params.batch_size).long())  # target 1
-
     for epoch in range(params.num_epochs):
+        # set train state for Dropout and BN layers
+        model.train()
         # zip source and target data pair
         len_dataloader = min(len(src_data_loader), len(tgt_data_loader))
         data_zip = enumerate(zip(src_data_loader, tgt_data_loader))
@@ -45,6 +45,12 @@ def train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
 
             p = float(step + epoch * len_dataloader) / params.num_epochs / len_dataloader
             alpha = 2. / (1. + np.exp(-10 * p)) - 1
+
+            # prepare domain label
+            size_src = len(images_src)
+            size_tgt = len(images_tgt)
+            label_src = make_variable(torch.zeros(size_src).long())  # source 0
+            label_tgt = make_variable(torch.ones(size_tgt).long())  # target 1
 
             # make images variable
             class_src = make_variable(class_src)
@@ -55,12 +61,12 @@ def train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
             optimizer.zero_grad()
 
             # train on source domain
-            src_class_output, src_domain_output = dann(input_data=images_src, alpha=alpha)
+            src_class_output, src_domain_output = model(input_data=images_src, alpha=alpha)
             src_loss_class = criterion(src_class_output, class_src)
             src_loss_domain = criterion(src_domain_output, label_src)
 
             # train on target domain
-            _, tgt_domain_output = dann(input_data=images_tgt, alpha=alpha)
+            _, tgt_domain_output = model(input_data=images_tgt, alpha=alpha)
             tgt_loss_domain = criterion(tgt_domain_output, label_tgt)
 
             loss = src_loss_class + src_loss_domain + tgt_loss_domain
@@ -71,7 +77,7 @@ def train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
 
             # print step info
             if ((step + 1) % params.log_step == 0):
-                print("Epoch [{}/{}] Step [{}/{}]: src_loss_class={}, src_loss_domain={}, tgt_loss_domain={}, loss={}"
+                print("Epoch [{:4d}/{}] Step [{:2d}/{}]: src_loss_class={:.6f}, src_loss_domain={:.6f}, tgt_loss_domain={:.6f}, loss={:.6f}"
                       .format(epoch + 1,
                               params.num_epochs,
                               step + 1,
@@ -83,14 +89,16 @@ def train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
 
         # eval model on test set
         if ((epoch + 1) % params.eval_step == 0):
-            eval(dann, tgt_data_loader_eval)
-            dann.train()
+            print("eval on target domain")
+            eval(model, tgt_data_loader_eval)
+            print("eval on source domain")
+            eval_src(model, src_data_loader)
 
         # save model parameters
         if ((epoch + 1) % params.save_step == 0):
-            save_model(dann, params.src_dataset + '-' + params.tgt_dataset + "-dann-{}.pt".format(epoch + 1))
+            save_model(model, params.src_dataset + '-' + params.tgt_dataset + "-dann-{}.pt".format(epoch + 1))
 
     # save final model
-    save_model(dann, params.src_dataset + '-' + params.tgt_dataset + "-dann-final.pt")
+    save_model(model, params.src_dataset + '-' + params.tgt_dataset + "-dann-final.pt")
 
-    return dann
+    return model
