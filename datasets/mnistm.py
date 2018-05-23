@@ -1,7 +1,7 @@
 """Dataset setting and data loader for MNIST_M."""
 
 import torch
-from torchvision import datasets, transforms
+from torchvision import transforms
 import torch.utils.data as data
 from PIL import Image
 import os
@@ -41,7 +41,7 @@ class GetLoader(data.Dataset):
 def get_mnistm(train):
     """Get MNISTM datasets loader."""
     # image pre-processing
-    pre_process = transforms.Compose([transforms.Resize(params.image_size),
+    pre_process = transforms.Compose([transforms.Resize(params.digit_image_size),
                                      transforms.ToTensor(),
                                      transforms.Normalize(
                                           mean=params.dataset_mean,

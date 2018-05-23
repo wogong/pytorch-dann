@@ -9,6 +9,8 @@ from torch.autograd import Variable
 
 import params
 from datasets import get_mnist, get_mnistm, get_svhn
+from datasets.office import get_office
+from datasets.officecaltech import get_officecaltech
 
 
 def make_variable(tensor, volatile=False):
@@ -63,12 +65,17 @@ def get_data_loader(name, train=True):
         return get_mnistm(train)
     elif name == "SVHN":
         return get_svhn(train)
-
+    elif name == "amazon31":
+        return get_office(train, 'amazon')
+    elif name == "webcam31":
+        return get_office(train, 'webcam')
+    elif name == "webcam10":
+        return get_officecaltech(train, 'webcam')
 
 def init_model(net, restore):
     """Init models with cuda and weights."""
     # init weights of model
-    net.apply(init_weights)
+    # net.apply(init_weights)
 
     # restore model weights
     if restore is not None and os.path.exists(restore):
@@ -92,5 +99,4 @@ def save_model(net, filename):
         os.makedirs(params.model_root)
     torch.save(net.state_dict(),
                os.path.join(params.model_root, filename))
-    print("save pretrained model to: {}".format(os.path.join(params.model_root,
-                                                             filename)))
+    print("save pretrained model to: {}".format(os.path.join(params.model_root, filename)))

@@ -1,5 +1,4 @@
-from models.model import CNNModel
-from models.classifier import Classifier
+from models.model import SVHNmodel, Classifier
 
 from core.dann import train_dann
 from core.test import eval, eval_src
@@ -33,14 +32,14 @@ print("=== Evaluating source classifier for target domain ===")
 eval_src(src_classifier, tgt_data_loader_eval)
 
 # load dann model
-dann = init_model(net=CNNModel(), restore=params.dann_restore)
+dann = init_model(net=SVHNmodel(), restore=params.dann_restore)
 
 # train dann model
 print("=== Training dann model ===")
 
 if not (dann.restored and params.dann_restore):
     dann = train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader_eval)
-
+w
 # eval dann model
 print("=== Evaluating dann for source domain ===")
 eval(dann, src_data_loader_eval)
