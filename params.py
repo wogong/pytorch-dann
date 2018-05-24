@@ -7,16 +7,9 @@ dataset_root = os.path.expanduser(os.path.join('~', 'Datasets'))
 model_root = os.path.expanduser(os.path.join('~', 'Models', 'pytorch-DANN'))
 
 # params for datasets and data loader
-dataset_mean_value = 0.5
-dataset_std_value = 0.5
-dataset_mean = (dataset_mean_value, dataset_mean_value, dataset_mean_value)
-dataset_std = (dataset_std_value, dataset_std_value, dataset_std_value)
-
-imagenet_dataset_mean = (0.485, 0.456, 0.406)
-imagenet_dataset_std = (0.229, 0.224, 0.225)
 
 batch_size = 64
-digit_image_size = 28
+
 office_image_size = 227
 
 # params for source dataset

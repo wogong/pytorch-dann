@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 _gsdata_
+*.ipynb
 
 # C extensions
 *.so
@@ -105,3 +106,4 @@ ENV/
 .idea
 .DS_Store
 main_legacy.py
+test.ipynb

@@ -41,11 +41,12 @@ class GetLoader(data.Dataset):
 def get_mnistm(train):
     """Get MNISTM datasets loader."""
     # image pre-processing
-    pre_process = transforms.Compose([transforms.Resize(params.digit_image_size),
+    pre_process = transforms.Compose([transforms.Resize(28),
                                      transforms.ToTensor(),
                                      transforms.Normalize(
-                                          mean=params.dataset_mean,
-                                          std=params.dataset_std)])
+                                          mean=(0.5, 0.5, 0.5),
+                                          std=(0.5, 0.5, 0.5)
+                                     )])
 
     # datasets and data_loader
     if train:

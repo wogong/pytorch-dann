@@ -13,8 +13,9 @@ def get_officecaltech(train, category):
     pre_process = transforms.Compose([transforms.Resize(params.office_image_size),
                                      transforms.ToTensor(),
                                      transforms.Normalize(
-                                          mean=params.imagenet_dataset_mean,
-                                          std=params.imagenet_dataset_mean)])
+                                          mean=(0.485, 0.456, 0.406),
+                                          std=(0.229, 0.224, 0.225)
+                                     )])
 
     # datasets and data_loader
     officecaltech_dataset = datasets.ImageFolder(
@@ -25,6 +26,6 @@ def get_officecaltech(train, category):
         dataset=officecaltech_dataset,
         batch_size=params.batch_size,
         shuffle=True,
-        num_workers=8)
+        num_workers=4)
 
     return officecaltech_dataloader

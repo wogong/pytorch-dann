@@ -15,8 +15,9 @@ def get_svhn(train):
                                       transforms.Resize(params.digit_image_size),
                                       transforms.ToTensor(),
                                       transforms.Normalize(
-                                          mean=params.dataset_mean,
-                                          std=params.dataset_std)])
+                                          mean=(0.5, 0.5, 0.5),
+                                          std=(0.5, 0.5, 0.5)
+                                      )])
 
     # datasets and data loader
     if train:
