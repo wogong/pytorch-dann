@@ -154,46 +154,41 @@ class AlexModel(nn.Module):
 
         self.features = model_alexnet.features
 
-        # self.classifier = nn.Sequential()
-        # for i in range(5):
-        #     self.classifier.add_module(
-        #         "classifier" + str(i), model_alexnet.classifier[i])
-        # self.__in_features = model_alexnet.classifier[4].in_features
-        # self.classifier.add_module('classifier5', nn.Dropout())
-        # self.classifier.add_module('classifier6', nn.Linear(self.__in_features, 256))
-        # self.classifier.add_module('classifier7', nn.BatchNorm2d(256))
-        # self.classifier.add_module('classifier8', nn.ReLU())
-        # self.classifier.add_module('classifier9', nn.Dropout(0.5))
-        # self.classifier.add_module('classifier10', nn.Linear(256, params.class_num_src))
-        self.classifier = nn.Sequential(
-            nn.Dropout(0.5),
-            nn.Linear(256 * 6 * 6, 4096),
-            nn.ReLU(inplace=True),
-            nn.Dropout(0.5),
+        self.fc = nn.Sequential()
+        for i in range(6):
+            self.fc.add_module("classifier" + str(i), model_alexnet.classifier[i])
+        self.__in_features = model_alexnet.classifier[6].in_features # 4096
+
+        self.bottleneck = nn.Sequential(
             nn.Linear(4096, 256),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 31),
+            nn.Dropout(),
+        )
+
+        self.classifier = nn.Sequential(
+            nn.Linear(256, 31)
         )
 
         self.discriminator = nn.Sequential(
-            nn.Linear(256 * 6 * 6, 1024),
+            nn.Linear(256, 1024),
             nn.ReLU(),
-            nn.Dropout(0.5),
+            nn.Dropout(),
             nn.Linear(1024, 1024),
             nn.ReLU(),
-            nn.Dropout(0.5),
+            nn.Dropout(),
             nn.Linear(1024, 2),
         )
 
     def forward(self, input_data, alpha):
         input_data = input_data.expand(input_data.data.shape[0], 3, 227, 227)
         feature = self.features(input_data)
-        feature = feature.view(-1, 256 * 6 * 6)
+        feature = feature.view(-1, 256*6*6)
+        fc = self.fc(feature)
+        bottleneck = self.bottleneck(fc)
 
-        reverse_feature = ReverseLayerF.apply(feature, alpha)
+        reverse_bottleneck = ReverseLayerF.apply(bottleneck, alpha)
 
-        class_output = self.classifier(feature)
-
-        domain_output = self.discriminator(reverse_feature)
+        class_output = self.classifier(bottleneck)
+        domain_output = self.discriminator(reverse_bottleneck)
 
         return class_output, domain_output

@@ -12,7 +12,7 @@ class Config(object):
     model_root = os.path.expanduser(os.path.join('~', 'Models', 'pytorch-DANN'))
 
     # params for datasets and data loader
-    batch_size = 128
+    batch_size = 32
 
     # params for source dataset
     src_dataset = "amazon31"
@@ -33,10 +33,10 @@ class Config(object):
     # params for training dann
 
     ## for office
-    num_epochs = 1000
-    log_step = 10  # iters
+    num_epochs = 4000
+    log_step = 25  # iters
     save_step = 500
-    eval_step = 5  # epochs
+    eval_step = 50 # epochs
 
     manual_seed = 8888
     alpha = 0
@@ -50,17 +50,17 @@ params = Config()
 init_random_seed(params.manual_seed)
 
 # load dataset
-src_data_loader = get_data_loader(params.src_dataset)
-tgt_data_loader = get_data_loader(params.tgt_dataset)
+src_data_loader = get_data_loader(params.src_dataset, params.dataset_root, params.batch_size)
+tgt_data_loader = get_data_loader(params.tgt_dataset, params.dataset_root, params.batch_size)
 
 # load dann model
-dann = init_model(net=AlexModel(), restore=params.dann_restore)
+dann = init_model(net=AlexModel(), restore=None)
 
 # train dann model
 print("Start training dann model.")
 
 if not (dann.restored and params.dann_restore):
-    dann = train_dann(dann, src_data_loader, tgt_data_loader, tgt_data_loader)
+    dann = train_dann(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader)
 
 # eval dann model
 print("Evaluating dann for source domain")
