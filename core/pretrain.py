@@ -3,11 +3,10 @@
 import torch.nn as nn
 import torch.optim as optim
 
-import params
 from utils import make_variable, save_model
 from core.test import eval_src
 
-def train_src(model, data_loader):
+def train_src(model, params, data_loader):
     """Train classifier for source domain."""
     ####################
     # 1. setup network #

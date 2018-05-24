@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-import params
 from utils import make_variable, save_model
 import numpy as np
 from core.test import eval, eval_src
@@ -12,19 +11,19 @@ from core.test import eval, eval_src
 import torch.backends.cudnn as cudnn
 cudnn.benchmark = True
 
-def train_dann(model, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
+def train_dann(model, params, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
     """Train dann."""
     ####################
     # 1. setup network #
     ####################
 
     # setup criterion and optimizer
-    parameter_list = [
-        {"params": model.features.parameters(), "lr": 1e-5},
-        {"params": model.classifier.parameters(), "lr": 1e-4},
-        {"params": model.discriminator.parameters(), "lr": 1e-4}
-    ]
-    optimizer = optim.Adam(parameter_list)
+    # parameter_list = [
+    #     #     {"params": model.feature.parameters(), "lr": 1e-5},
+    #     #     {"params": model.classifier.parameters(), "lr": 1e-4},
+    #     #     {"params": model.discriminator.parameters(), "lr": 1e-4}
+    #     # ]
+    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
     criterion = nn.CrossEntropyLoss()
 
@@ -45,6 +44,7 @@ def train_dann(model, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
 
             p = float(step + epoch * len_dataloader) / params.num_epochs / len_dataloader
             alpha = 2. / (1. + np.exp(-10 * p)) - 1
+            adjust_learning_rate(optimizer, p)
 
             # prepare domain label
             size_src = len(images_src)
@@ -96,9 +96,18 @@ def train_dann(model, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
 
         # save model parameters
         if ((epoch + 1) % params.save_step == 0):
-            save_model(model, params.src_dataset + '-' + params.tgt_dataset + "-dann-{}.pt".format(epoch + 1))
+            save_model(model, params.model_root, params.src_dataset + '-' + params.tgt_dataset + "-dann-{}.pt".format(epoch + 1))
 
     # save final model
-    save_model(model, params.src_dataset + '-' + params.tgt_dataset + "-dann-final.pt")
+    save_model(model, params.model_root, params.src_dataset + '-' + params.tgt_dataset + "-dann-final.pt")
 
     return model
+
+def adjust_learning_rate(optimizer, p):
+    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    lr_0 = 0.01
+    alpha = 10
+    beta = 0.75
+    lr = lr_0 / (1 + alpha*p) ** beta
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr

@@ -5,7 +5,6 @@ from torchvision import transforms
 import torch.utils.data as data
 from PIL import Image
 import os
-import params
 
 class GetLoader(data.Dataset):
     def __init__(self, data_root, data_list, transform=None):
@@ -38,7 +37,7 @@ class GetLoader(data.Dataset):
     def __len__(self):
         return self.n_data
 
-def get_mnistm(train):
+def get_mnistm(dataset_root, batch_size, train):
     """Get MNISTM datasets loader."""
     # image pre-processing
     pre_process = transforms.Compose([transforms.Resize(28),
@@ -50,21 +49,21 @@ def get_mnistm(train):
 
     # datasets and data_loader
     if train:
-        train_list = os.path.join(params.dataset_root, 'mnist_m','mnist_m_train_labels.txt')
+        train_list = os.path.join(dataset_root, 'mnist_m','mnist_m_train_labels.txt')
         mnistm_dataset = GetLoader(
-            data_root=os.path.join(params.dataset_root, 'mnist_m', 'mnist_m_train'),
+            data_root=os.path.join(dataset_root, 'mnist_m', 'mnist_m_train'),
             data_list=train_list,
             transform=pre_process)
     else:
-        train_list = os.path.join(params.dataset_root, 'mnist_m', 'mnist_m_test_labels.txt')
+        train_list = os.path.join(dataset_root, 'mnist_m', 'mnist_m_test_labels.txt')
         mnistm_dataset = GetLoader(
-            data_root=os.path.join(params.dataset_root, 'mnist_m', 'mnist_m_test'),
+            data_root=os.path.join(dataset_root, 'mnist_m', 'mnist_m_test'),
             data_list=train_list,
             transform=pre_process)
 
     mnistm_dataloader = torch.utils.data.DataLoader(
         dataset=mnistm_dataset,
-        batch_size=params.batch_size,
+        batch_size=batch_size,
         shuffle=True,
         num_workers=8)
 

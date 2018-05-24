@@ -5,9 +5,7 @@ import torch
 from torchvision import datasets, transforms
 import os
 
-import params
-
-def get_mnist(train):
+def get_mnist(dataset_root, batch_size, train):
     """Get MNIST datasets loader."""
     # image pre-processing
     pre_process = transforms.Compose([transforms.ToTensor(),
@@ -17,7 +15,7 @@ def get_mnist(train):
                                       )])
 
     # datasets and data loader
-    mnist_dataset = datasets.MNIST(root=os.path.join(params.dataset_root,'mnist'),
+    mnist_dataset = datasets.MNIST(root=os.path.join(dataset_root,'mnist'),
                                    train=train,
                                    transform=pre_process,
                                    download=False)
@@ -25,8 +23,9 @@ def get_mnist(train):
 
     mnist_data_loader = torch.utils.data.DataLoader(
         dataset=mnist_dataset,
-        batch_size=params.batch_size,
+        batch_size=batch_size,
         shuffle=True,
-        drop_last=True)
+        drop_last=True,
+        num_workers=8)
 
     return mnist_data_loader

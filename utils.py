@@ -7,7 +7,6 @@ import torch
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 
-import params
 from datasets import get_mnist, get_mnistm, get_svhn
 from datasets.office import get_office
 from datasets.officecaltech import get_officecaltech
@@ -57,20 +56,20 @@ def init_random_seed(manual_seed):
         torch.cuda.manual_seed_all(seed)
 
 
-def get_data_loader(name, train=True):
+def get_data_loader(name, dataset_root, batch_size, train=True):
     """Get data loader by name."""
-    if name == "MNIST":
-        return get_mnist(train)
-    elif name == "MNISTM":
-        return get_mnistm(train)
-    elif name == "SVHN":
-        return get_svhn(train)
+    if name == "mnist":
+        return get_mnist(dataset_root, batch_size, train)
+    elif name == "mnistm":
+        return get_mnistm(dataset_root, batch_size, train)
+    elif name == "svhn":
+        return get_svhn(dataset_root, batch_size, train)
     elif name == "amazon31":
-        return get_office(train, 'amazon')
+        return get_office(dataset_root, batch_size, 'amazon')
     elif name == "webcam31":
-        return get_office(train, 'webcam')
+        return get_office(dataset_root, batch_size, 'webcam')
     elif name == "webcam10":
-        return get_officecaltech(train, 'webcam')
+        return get_officecaltech(dataset_root, batch_size, 'webcam')
 
 def init_model(net, restore):
     """Init models with cuda and weights."""
@@ -92,11 +91,10 @@ def init_model(net, restore):
 
     return net
 
-
-def save_model(net, filename):
+def save_model(net, model_root, filename):
     """Save trained model."""
-    if not os.path.exists(params.model_root):
-        os.makedirs(params.model_root)
+    if not os.path.exists(model_root):
+        os.makedirs(model_root)
     torch.save(net.state_dict(),
-               os.path.join(params.model_root, filename))
-    print("save pretrained model to: {}".format(os.path.join(params.model_root, filename)))
+               os.path.join(model_root, filename))
+    print("save pretrained model to: {}".format(os.path.join(model_root, filename)))
