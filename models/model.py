@@ -5,6 +5,7 @@ from .functions import ReverseLayerF
 from torchvision import models
 from .alexnet import alexnet
 
+
 class Classifier(nn.Module):
     """ SVHN architecture without discriminator"""
 
@@ -42,6 +43,7 @@ class Classifier(nn.Module):
 
         return class_output
 
+
 class MNISTmodel(nn.Module):
     """ MNIST architecture
     +Dropout2d, 84% ~ 73%
@@ -53,15 +55,17 @@ class MNISTmodel(nn.Module):
         self.restored = False
 
         self.feature = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(5, 5)), # 3 28 28, 32 24 24
+            nn.Conv2d(in_channels=3, out_channels=32,
+                      kernel_size=(5, 5)),  # 3 28 28, 32 24 24
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(2, 2)), # 32 12 12
-            nn.Conv2d(in_channels=32, out_channels=48, kernel_size=(5, 5)), # 48 8 8
+            nn.MaxPool2d(kernel_size=(2, 2)),  # 32 12 12
+            nn.Conv2d(in_channels=32, out_channels=48,
+                      kernel_size=(5, 5)),  # 48 8 8
             nn.BatchNorm2d(48),
             nn.Dropout2d(),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(2, 2)), # 48 4 4
+            nn.MaxPool2d(kernel_size=(2, 2)),  # 48 4 4
         )
 
         self.classifier = nn.Sequential(
@@ -91,6 +95,7 @@ class MNISTmodel(nn.Module):
 
         return class_output, domain_output
 
+
 class SVHNmodel(nn.Module):
     """ SVHN architecture
         I don't know how to implement the paper's structure
@@ -102,15 +107,17 @@ class SVHNmodel(nn.Module):
         self.restored = False
 
         self.feature = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(5, 5), stride=(1, 1)), # 3 28 28, 64 24 24
+            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(
+                5, 5), stride=(1, 1)),  # 3 28 28, 64 24 24
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(2, 2)), # 64 12 12
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(5, 5)), # 64 8 8
+            nn.MaxPool2d(kernel_size=(2, 2)),  # 64 12 12
+            nn.Conv2d(in_channels=64, out_channels=64,
+                      kernel_size=(5, 5)),  # 64 8 8
             nn.BatchNorm2d(64),
             nn.Dropout2d(),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)), # 64 4 4
+            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),  # 64 4 4
             nn.ReLU(inplace=True),
         )
 
@@ -144,6 +151,7 @@ class SVHNmodel(nn.Module):
 
         return class_output, domain_output
 
+
 class AlexModel(nn.Module):
     """ AlexNet pretrained on imagenet for Office dataset"""
 
@@ -156,20 +164,21 @@ class AlexModel(nn.Module):
 
         self.fc = nn.Sequential()
         for i in range(6):
-            self.fc.add_module("classifier" + str(i), model_alexnet.classifier[i])
-        self.__in_features = model_alexnet.classifier[6].in_features # 4096
+            self.fc.add_module("classifier" + str(i),
+                               model_alexnet.classifier[i])
+        self.__in_features = model_alexnet.classifier[6].in_features  # 4096
 
         self.bottleneck = nn.Sequential(
-            nn.Linear(4096, 1024),
+            nn.Linear(4096, 2048),
             nn.ReLU(inplace=True),
         )
 
         self.classifier = nn.Sequential(
-            nn.Linear(1024, 31),
+            nn.Linear(2048, 31),
         )
 
         self.discriminator = nn.Sequential(
-            nn.Linear(1024, 1024),
+            nn.Linear(2048, 1024),
             nn.ReLU(),
             nn.Dropout(),
             nn.Linear(1024, 1024),
