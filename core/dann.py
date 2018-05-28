@@ -25,13 +25,13 @@ def train_dann(model, params, src_data_loader, tgt_data_loader, tgt_data_loader_
     else:
         print("training office task")
         parameter_list = [
-             {"params": model.features.parameters(), "lr": 1e-5},
-             {"params": model.fc.parameters(), "lr": 1e-5},
-             {"params": model.bottleneck.parameters(), "lr": 1e-4},
-             {"params": model.classifier.parameters(), "lr": 1e-4},
-             {"params": model.discriminator.parameters(), "lr": 1e-4}
+             {"params": model.features.parameters(), "lr": 0.001},
+             {"params": model.fc.parameters(), "lr": 0.001},
+             {"params": model.bottleneck.parameters()},
+             {"params": model.classifier.parameters()},
+             {"params": model.discriminator.parameters()}
         ]
-        optimizer = optim.SGD(parameter_list)
+        optimizer = optim.SGD(parameter_list, lr=0.01, momentum=0.9)
 
     criterion = nn.CrossEntropyLoss()
 
@@ -52,9 +52,12 @@ def train_dann(model, params, src_data_loader, tgt_data_loader, tgt_data_loader_
 
             p = float(step + epoch * len_dataloader) / params.num_epochs / len_dataloader
             alpha = 2. / (1. + np.exp(-10 * p)) - 1
+            alpha = 2*alpha
+
             if params.src_dataset == 'mnist' or params.tgt_dataset == 'mnist':
-                print("training mnist task")
                 adjust_learning_rate(optimizer, p)
+            else:
+                adjust_learning_rate_office(optimizer, p)
 
             # prepare domain label
             size_src = len(images_src)
@@ -114,10 +117,19 @@ def train_dann(model, params, src_data_loader, tgt_data_loader, tgt_data_loader_
     return model
 
 def adjust_learning_rate(optimizer, p):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     lr_0 = 0.01
     alpha = 10
     beta = 0.75
     lr = lr_0 / (1 + alpha*p) ** beta
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
+
+def adjust_learning_rate_office(optimizer, p):
+    lr_0 = 0.001
+    alpha = 10
+    beta = 0.75
+    lr = lr_0 / (1 + alpha*p) ** beta
+    for param_group in optimizer.param_groups[:2]:
+        param_group['lr'] = lr
+    for param_group in optimizer.param_groups[2:]:
+        param_group['lr'] = 10*lr

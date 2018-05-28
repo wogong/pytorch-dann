@@ -22,14 +22,15 @@ A pytorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 
 ## Result
 
-|                 | MNIST-MNISTM   | SVHN-MNIST |
-| :-------------: | :------------: | :--------: |
-| Source Only     |   0.5225       |  0.5490    |
-| DANN            |   0.7666       |  0.7385    |
-| This Repo       |   0.8400       |  0.7339    |
+|                 | MNIST-MNISTM   | SVHN-MNIST | Amazon-Webcam |
+| :-------------: | :------------: | :--------: | :--------: |
+| Source Only     |   0.5225       |  0.5490    |  0.6420    |
+| DANN            |   0.7666       |  0.7385    |  0.7300    |
+| This Repo       |   0.8400       |  0.7339    |  0.6214    |
 
 - MNIST-MNISTM: `python mnist_mnistm.py`
 - SVHN-MNIST: `python svhn_mnist.py`
+- Amazon-Webcam: 没有复现成功
 
 ## Other implementations
 

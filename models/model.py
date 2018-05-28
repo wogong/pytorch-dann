@@ -3,7 +3,7 @@
 import torch.nn as nn
 from .functions import ReverseLayerF
 from torchvision import models
-
+from .alexnet import alexnet
 
 class Classifier(nn.Module):
     """ SVHN architecture without discriminator"""
@@ -160,17 +160,16 @@ class AlexModel(nn.Module):
         self.__in_features = model_alexnet.classifier[6].in_features # 4096
 
         self.bottleneck = nn.Sequential(
-            nn.Linear(4096, 256),
+            nn.Linear(4096, 1024),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
         )
 
         self.classifier = nn.Sequential(
-            nn.Linear(256, 31)
+            nn.Linear(1024, 31),
         )
 
         self.discriminator = nn.Sequential(
-            nn.Linear(256, 1024),
+            nn.Linear(1024, 1024),
             nn.ReLU(),
             nn.Dropout(),
             nn.Linear(1024, 1024),

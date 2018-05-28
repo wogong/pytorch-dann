@@ -26,17 +26,17 @@ class Config(object):
 
     # params for pretrain
     num_epochs_src = 100
-    log_step_src = 10
+    log_step_src = 5
     save_step_src = 50
     eval_step_src = 20
 
     # params for training dann
 
     ## for office
-    num_epochs = 4000
-    log_step = 25  # iters
+    num_epochs = 2000
+    log_step = 10  # iters
     save_step = 500
-    eval_step = 50 # epochs
+    eval_step = 5 # epochs
 
     manual_seed = 8888
     alpha = 0
