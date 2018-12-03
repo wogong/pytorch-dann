@@ -1,8 +1,10 @@
 import os
+import sys
 
+sys.path.append('../')
 from models.model import SVHNmodel
 from core.dann import train_dann
-from utils import get_data_loader, init_model, init_random_seed
+from utils.utils import get_data_loader, init_model, init_random_seed
 
 
 class Config(object):

@@ -1,5 +1,3 @@
-"""Utilities for ADDA."""
-
 import os
 import random
 
@@ -10,13 +8,6 @@ from torch.autograd import Variable
 from datasets import get_mnist, get_mnistm, get_svhn
 from datasets.office import get_office
 from datasets.officecaltech import get_officecaltech
-
-
-def make_variable(tensor, volatile=False):
-    """Convert Tensor to Variable."""
-    if torch.cuda.is_available():
-        tensor = tensor.cuda()
-    return Variable(tensor, volatile=volatile)
 
 
 def make_cuda(tensor):
@@ -71,6 +62,7 @@ def get_data_loader(name, dataset_root, batch_size, train=True):
     elif name == "webcam10":
         return get_officecaltech(dataset_root, batch_size, 'webcam')
 
+
 def init_model(net, restore):
     """Init models with cuda and weights."""
     # init weights of model
@@ -91,10 +83,10 @@ def init_model(net, restore):
 
     return net
 
+
 def save_model(net, model_root, filename):
     """Save trained model."""
     if not os.path.exists(model_root):
         os.makedirs(model_root)
-    torch.save(net.state_dict(),
-               os.path.join(model_root, filename))
+    torch.save(net.state_dict(), os.path.join(model_root, filename))
     print("save pretrained model to: {}".format(os.path.join(model_root, filename)))

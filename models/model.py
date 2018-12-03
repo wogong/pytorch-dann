@@ -179,10 +179,10 @@ class AlexModel(nn.Module):
 
         self.discriminator = nn.Sequential(
             nn.Linear(2048, 1024),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(1024, 1024),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(1024, 2),
         )

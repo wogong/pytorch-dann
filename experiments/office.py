@@ -1,15 +1,19 @@
 import os
+import sys
+
+import torch
+
+sys.path.append('../')
 from core.dann import train_dann
 from core.test import eval
 from models.model import AlexModel
-
-from utils import get_data_loader, init_model, init_random_seed
+from utils.utils import get_data_loader, init_model, init_random_seed
 
 
 class Config(object):
     # params for path
     dataset_root = os.path.expanduser(os.path.join('~', 'Datasets'))
-    model_root = os.path.expanduser(os.path.join('~', 'Models', 'pytorch-DANN'))
+    model_root = os.path.expanduser(os.path.join('~', 'Models', 'pytorch-dann'))
 
     # params for datasets and data loader
     batch_size = 32
@@ -28,15 +32,16 @@ class Config(object):
     num_epochs_src = 100
     log_step_src = 5
     save_step_src = 50
-    eval_step_src = 20
+    eval_step_src = 10
 
     # params for training dann
+    gpu_id = '0'
 
     ## for office
-    num_epochs = 2000
+    num_epochs = 1000
     log_step = 10  # iters
     save_step = 500
-    eval_step = 5 # epochs
+    eval_step = 5  # epochs
 
     manual_seed = 8888
     alpha = 0
@@ -44,10 +49,14 @@ class Config(object):
     # params for optimizing models
     lr = 2e-4
 
+
 params = Config()
 
 # init random seed
 init_random_seed(params.manual_seed)
+
+# init device
+device = torch.device("cuda:" + params.gpu_id if torch.cuda.is_available() else "cpu")
 
 # load dataset
 src_data_loader = get_data_loader(params.src_dataset, params.dataset_root, params.batch_size)
@@ -60,7 +69,7 @@ dann = init_model(net=AlexModel(), restore=None)
 print("Start training dann model.")
 
 if not (dann.restored and params.dann_restore):
-    dann = train_dann(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader)
+    dann = train_dann(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader, device)
 
 # eval dann model
 print("Evaluating dann for source domain")
