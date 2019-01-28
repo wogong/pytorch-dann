@@ -1,6 +1,6 @@
 # PyTorch-DANN
 
-A pytorch implementation for paper *[Unsupervised Domain Adaptation by Backpropagation](http://sites.skoltech.ru/compvision/projects/grl/)*
+A PyTorch implementation for paper *[Unsupervised Domain Adaptation by Backpropagation](http://sites.skoltech.ru/compvision/projects/grl/)*
 
     InProceedings (icml2015-ganin15)
     Ganin, Y. & Lempitsky, V.
@@ -10,7 +10,7 @@ A pytorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 ## Environment
 
 - Python 3.6
-- PyTorch 0.4.1
+- PyTorch 1.0
 
 ## Note
 
