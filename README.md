@@ -9,8 +9,8 @@ A pytorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 
 ## Environment
 
-- Python 2.7/3.6
-- PyTorch 0.3.1post2
+- Python 3.6
+- PyTorch 0.4.1
 
 ## Note
 
