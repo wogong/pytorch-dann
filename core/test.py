@@ -34,7 +34,7 @@ def test_from_save(model, saved_model, data_loader, device):
     print("Avg Loss = {}, Avg Accuracy = {:.2%}".format(loss, acc))
 
 
-def eval(model, data_loader, device, flag):
+def test(model, data_loader, device, flag):
     """Evaluate model for dataset."""
     # set eval state for Dropout and BN layers
     model.eval()

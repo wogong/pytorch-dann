@@ -52,6 +52,7 @@ class Config(object):
     # params for optimizing models
     lr = 2e-4
 
+
 params = Config()
 
 # init random seed
@@ -70,9 +71,3 @@ dann = init_model(net=MNISTmodel(), restore=None)
 print("Training dann model")
 if not (dann.restored and params.dann_restore):
     dann = train_dann(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader_eval)
-
-# eval dann model
-print("Evaluating dann for source domain {}".format(params.src_dataset))
-eval(dann, src_data_loader_eval)
-print("Evaluating dann for target domain {}".format(params.tgt_dataset))
-eval(dann, tgt_data_loader_eval)

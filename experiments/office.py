@@ -5,7 +5,7 @@ import torch
 
 sys.path.append('../')
 from core.dann import train_dann
-from core.test import eval
+from core.test import test
 from models.model import AlexModel
 from utils.utils import get_data_loader, init_model, init_random_seed
 
@@ -41,7 +41,7 @@ class Config(object):
     num_epochs = 1000
     log_step = 10  # iters
     save_step = 500
-    eval_step = 5  # epochs
+    eval_step = 10  # epochs
 
     manual_seed = 8888
     alpha = 0
@@ -70,11 +70,5 @@ print("Start training dann model.")
 
 if not (dann.restored and params.dann_restore):
     dann = train_dann(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader, device)
-
-# eval dann model
-print("Evaluating dann for source domain")
-eval(dann, src_data_loader)
-print("Evaluating dann for target domain")
-eval(dann, tgt_data_loader)
 
 print('done')

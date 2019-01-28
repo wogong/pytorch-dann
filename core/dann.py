@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from core.test import eval
+from core.test import test
 from utils.utils import save_model
 
 import torch.backends.cudnn as cudnn
@@ -103,9 +103,9 @@ def train_dann(model, params, src_data_loader, tgt_data_loader, tgt_data_loader_
         # eval model
         if ((epoch + 1) % params.eval_step == 0):
             print("eval on target domain")
-            eval(model, tgt_data_loader, device, flag='target')
+            test(model, tgt_data_loader, device, flag='target')
             print("eval on source domain")
-            eval(model, src_data_loader, device, flag='source')
+            test(model, src_data_loader, device, flag='source')
 
         # save model parameters
         if ((epoch + 1) % params.save_step == 0):

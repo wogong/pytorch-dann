@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 
 from utils.utils import save_model
-from core.test import eval
+from core.test import test
 
 
 def train_src(model, params, data_loader, device):
@@ -34,8 +34,8 @@ def train_src(model, params, data_loader, device):
             optimizer.zero_grad()
 
             # compute loss for critic
-            preds = model(images)
-            loss = loss_class(preds, labels)
+            preds_class, _ = model(images)
+            loss = loss_class(preds_class, labels)
 
             # optimize source classifier
             loss.backward()
@@ -48,7 +48,7 @@ def train_src(model, params, data_loader, device):
 
         # eval model on test set
         if ((epoch + 1) % params.eval_step_src == 0):
-            eval(model, data_loader, flag='source')
+            test(model, data_loader, flag='source')
             model.train()
 
         # save model parameters
