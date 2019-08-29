@@ -6,8 +6,6 @@ import torch
 sys.path.append('../')
 from models.model import SVHNmodel
 from core.dann import train_dann
-from core.pretrain import train_src
-from core.test import test
 from utils.utils import get_data_loader, init_model, init_random_seed
 
 
@@ -56,7 +54,6 @@ class Config(object):
 
     # params for optimizing models
     lr = 2e-4
-
 
 params = Config()
 
