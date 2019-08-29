@@ -71,3 +71,5 @@ def test(model, data_loader, device, flag):
     acc_domain /= len(data_loader.dataset)
 
     print("Avg Loss = {:.6f}, Avg Accuracy = {:.2%}, Avg Domain Accuracy = {:2%}".format(loss, acc, acc_domain))
+
+    return loss, acc, acc_domain

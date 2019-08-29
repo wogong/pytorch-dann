@@ -3,12 +3,12 @@ import random
 
 import torch
 import torch.backends.cudnn as cudnn
-from torch.autograd import Variable
 
 from datasets import get_mnist, get_mnistm, get_svhn
 from datasets.office import get_office
 from datasets.officecaltech import get_officecaltech
-
+from datasets.synsigns import get_synsigns
+from datasets.gtsrb import get_gtsrb
 
 def make_cuda(tensor):
     """Use CUDA if it's available."""
@@ -61,6 +61,10 @@ def get_data_loader(name, dataset_root, batch_size, train=True):
         return get_office(dataset_root, batch_size, 'webcam')
     elif name == "webcam10":
         return get_officecaltech(dataset_root, batch_size, 'webcam')
+    elif name == "synsigns":
+        return get_synsigns(dataset_root, batch_size, train)
+    elif name == "gtsrb":
+        return get_gtsrb(dataset_root, batch_size, train)
 
 
 def init_model(net, restore):
