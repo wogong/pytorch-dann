@@ -21,7 +21,7 @@ def train_dann(model, params, src_data_loader, tgt_data_loader, tgt_data_loader_
 
     if not params.finetune_flag:
         print("training non-office task")
-        optimizer = optim.SGD(model.parameters(), lr=params.lr, momentum=params.momentum)
+        optimizer = optim.SGD(model.parameters(), lr=params.lr, momentum=params.momentum, weight_decay=params.weight_decay)
     else:
         print("training office task")
         parameter_list = [{
