@@ -19,6 +19,7 @@ class Config(object):
     config = os.path.join(model_root, 'config.txt')
     finetune_flag = False
     lr_adjust_flag = 'simple'
+    src_only_flag = False
 
     # params for datasets and data loader
     batch_size = 128
@@ -35,13 +36,7 @@ class Config(object):
     tgt_model_trained = True
     dann_restore = os.path.join(model_root, src_dataset + '-' + tgt_dataset + '-dann-final.pt')
 
-    # params for pretrain
-    num_epochs_src = 100
-    log_step_src = 10
-    save_step_src = 50
-    eval_step_src = 20
-
-    # params for training dann
+    # params for GPU device
     gpu_id = '0'
 
     ## for digit
@@ -53,7 +48,7 @@ class Config(object):
     manual_seed = None
     alpha = 0
 
-    # params for optimizing models
+    # params for SGD optimizer
     lr = 0.01
     momentum = 0.9
 
