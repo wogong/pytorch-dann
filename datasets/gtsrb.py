@@ -15,7 +15,7 @@ def get_gtsrb(dataset_root, batch_size, train):
 
     # image pre-processing
     pre_process = transforms.Compose([
-        transforms.Resize((40, 40)),
+        transforms.Resize((48, 48)),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])

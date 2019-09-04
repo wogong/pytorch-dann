@@ -13,7 +13,7 @@ class Config(object):
     # params for path
     model_name = "synsigns-gtsrb"
     model_base = '/home/wogong/models/pytorch-dann'
-    note = 'fix_lr'
+    note = '48-fixrelu-l2-dropout'
     model_root = os.path.join(model_base, model_name, note + '_' + datetime.datetime.now().strftime('%m%d_%H%M%S'))
     os.makedirs(model_root)
     config = os.path.join(model_root, 'config.txt')
@@ -51,6 +51,7 @@ class Config(object):
     # params for SGD optimizer
     lr = 0.01
     momentum = 0.9
+    weight_decay = 1e-6
 
     def __init__(self):
         public_props = (name for name in dir(self) if not name.startswith('_'))
