@@ -4,7 +4,7 @@ import sys
 import torch
 sys.path.append('../')
 from models.model import MNISTmodel, MNISTmodel_plain
-from core.dann import train_dann
+from core.train import train_dann
 from utils.utils import get_data_loader, init_model, init_random_seed
 
 

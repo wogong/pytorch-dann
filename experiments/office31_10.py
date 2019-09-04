@@ -2,7 +2,7 @@ import os
 import sys
 
 sys.path.append('../')
-from core.dann import train_dann
+from core.train import train_dann
 from core.test import test
 from models.model import AlexModel
 

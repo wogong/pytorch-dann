@@ -4,7 +4,7 @@ import sys
 import torch
 
 sys.path.append('../')
-from core.dann import train_dann
+from core.train import train_dann
 from core.test import test
 from models.model import AlexModel
 from utils.utils import get_data_loader, init_model, init_random_seed
