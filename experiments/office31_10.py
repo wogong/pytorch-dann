@@ -39,7 +39,7 @@ class Config(object):
     num_epochs = 1000
     log_step = 10  # iters
     save_step = 500
-    eval_step = 5  # epochs
+    eval_step = 1  # epochs
 
     manual_seed = 8888
     alpha = 0
