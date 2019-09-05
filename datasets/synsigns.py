@@ -43,7 +43,7 @@ def get_synsigns(dataset_root, batch_size, train):
     """Get Synthetic Signs datasets loader."""
     # image pre-processing
     pre_process = transforms.Compose([
-        transforms.Resize((48, 48)),
+        transforms.Resize((40, 40)),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])

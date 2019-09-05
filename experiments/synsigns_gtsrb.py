@@ -13,7 +13,7 @@ class Config(object):
     # params for path
     model_name = "synsigns-gtsrb"
     model_base = '/home/wogong/models/pytorch-dann'
-    note = '48-fixrelu-l2-dropout'
+    note = '40-bn'
     model_root = os.path.join(model_base, model_name, note + '_' + datetime.datetime.now().strftime('%m%d_%H%M%S'))
     os.makedirs(model_root)
     config = os.path.join(model_root, 'config.txt')
@@ -45,7 +45,7 @@ class Config(object):
     save_step = 100
     eval_step = 1
 
-    manual_seed = None
+    manual_seed = 42
     alpha = 0
 
     # params for SGD optimizer

@@ -13,7 +13,7 @@ class Config(object):
     # params for path
     model_name = "synsigns-gtsrb"
     model_base = '/home/wogong/models/pytorch-dann'
-    note = 'src-only-48-fixrelu-l2-dropout'
+    note = 'src-only-40-bn'
     model_root = os.path.join(model_base, model_name, note + '_' + datetime.datetime.now().strftime('%m%d_%H%M%S'))
     os.makedirs(model_root)
     config = os.path.join(model_root, 'config.txt')
@@ -23,7 +23,6 @@ class Config(object):
 
     # params for datasets and data loader
     batch_size = 128
-    img_size = 40
 
     # params for source dataset
     src_dataset = "synsigns"
