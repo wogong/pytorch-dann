@@ -21,17 +21,19 @@ A PyTorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 - `SVHNmodel()`
     - network structure proposed in the paper may be wrong for both 32x32 and 28x28 inputs
     - change last conv layer's filter to 4x4, get similar(actually higher) result
+- `GTSRBmodel()`
+    - not successful
 - `AlexModel`
     - not successful, mainly due to the preprain model difference
 
 ## Result
 
-|                      | MNIST-MNISTM   | SVHN-MNIST | Amazon-Webcam |Amazon-Webcam10 |
-| :------------------: | :------------: | :--------: | :-----------: |:-------------: |
-| Source Only          |   0.5225       |  0.5490    |  0.6420       | 0.             |
-| DANN(paper)          |   0.7666       |  0.7385    |  0.7300       | 0.             |
-| This Repo Source Only|   -            |  -         |  -            | 0.             |
-| This Repo            |   0.8400       |  0.7339    |  0.6528       | 0.             |
+|                      | MNIST-MNISTM   | SVHN-MNIST | Amazon-Webcam | SYNDIGITS-SVHN | SYNSIGNS-GTSRB |
+| :------------------: | :------------: | :--------: | :-----------: |:-------------: |:-------------: |
+| Source Only          |   0.5225       |  0.5490    |  0.6420       | 0.             | 0.             |
+| DANN(paper)          |   0.7666       |  0.7385    |  0.7300       | 0.9109         | 0.7900         |
+| This Repo Source Only|   -            |  -         |  -            | 0.             | 0.             |
+| This Repo            |   0.8400       |  0.7339    |  0.6528       | 0.8200         | 0.6200         |
 
 ## Credit
 
