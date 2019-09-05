@@ -14,12 +14,15 @@ A PyTorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 
 ## Note
 
-- `Config()` 为针对特定任务的配置参数
-- `MNISTmodel()` 完全按照论文中的结构，但是 feature 部分添加了 `Dropout2d()`，实验发现是否添加 `Dropout2d()` 对于最后的性能影响很大。最后实验重现结果高于论文，因为使用了额外的技巧，这里还有值得探究的地方。
-- `SVHNmodel()` 无法理解论文中提出的结构，为自定义结构。最后实验重现结果完美。
-- MNIST-MNISTM: `python mnist_mnistm.py`
-- SVHN-MNIST: `python svhn_mnist.py`
-- Amazon-Webcam: `python office.py` 由于预训练网络的问题，无法复现
+- `MNISTmodel()`
+    - basically the same network structure as proposed in the paper, expect for adding dropout layer in feature extractor
+    - large gap exsits between with and w/o dropout layer
+    - better result than paper
+- `SVHNmodel()`
+    - network structure proposed in the paper may be wrong for both 32x32 and 28x28 inputs
+    - change last conv layer's filter to 4x4, get similar(actually higher) result
+- `AlexModel`
+    - not successful, mainly due to the preprain model difference
 
 ## Result
 
