@@ -160,12 +160,12 @@ class SVHNmodel(nn.Module):
             nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(5, 5)),  # 28
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(3, 3), stride=(2, 2)),  # 14
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(5, 5)),  # 10
+            nn.MaxPool2d(kernel_size=(3, 3), stride=(2, 2)),  # 13
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(5, 5)),  # 9
             nn.BatchNorm2d(64),
             nn.Dropout2d(),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(3, 3), stride=(2, 2)),  # 5
+            nn.MaxPool2d(kernel_size=(3, 3), stride=(2, 2)),  # 4
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(4, 4)),  # 1
         )

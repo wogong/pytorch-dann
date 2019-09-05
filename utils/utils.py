@@ -7,6 +7,7 @@ import torch.backends.cudnn as cudnn
 from datasets import get_mnist, get_mnistm, get_svhn
 from datasets.office import get_office
 from datasets.officecaltech import get_officecaltech
+from datasets.syndigits import get_syndigits
 from datasets.synsigns import get_synsigns
 from datasets.gtsrb import get_gtsrb
 
@@ -61,6 +62,8 @@ def get_data_loader(name, dataset_root, batch_size, train=True):
         return get_office(dataset_root, batch_size, 'webcam')
     elif name == "webcam10":
         return get_officecaltech(dataset_root, batch_size, 'webcam')
+    elif name == "syndigits":
+        return get_syndigits(dataset_root, batch_size, train)
     elif name == "synsigns":
         return get_synsigns(dataset_root, batch_size, train)
     elif name == "gtsrb":
