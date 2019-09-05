@@ -150,8 +150,6 @@ class MNISTmodel_plain(nn.Module):
 
 class SVHNmodel(nn.Module):
     """ SVHN architecture
-        I don't know how to implement the paper's structure
-
     """
 
     def __init__(self):
@@ -159,22 +157,21 @@ class SVHNmodel(nn.Module):
         self.restored = False
 
         self.feature = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(
-                5, 5), stride=(1, 1)),  # 3 28 28, 64 24 24
+            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(5, 5)),  # 28
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(2, 2)),  # 64 12 12
-            nn.Conv2d(in_channels=64, out_channels=64,
-                      kernel_size=(5, 5)),  # 64 8 8
+            nn.MaxPool2d(kernel_size=(3, 3), stride=(2, 2)),  # 14
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(5, 5)),  # 10
             nn.BatchNorm2d(64),
             nn.Dropout2d(),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),  # 64 4 4
+            nn.MaxPool2d(kernel_size=(3, 3), stride=(2, 2)),  # 5
             nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(4, 4)),  # 1
         )
 
         self.classifier = nn.Sequential(
-            nn.Linear(64*4*4, 1024),
+            nn.Linear(128 * 1 * 1, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(inplace=True),
             nn.Linear(1024, 256),
@@ -184,7 +181,7 @@ class SVHNmodel(nn.Module):
         )
 
         self.discriminator = nn.Sequential(
-            nn.Linear(64*4*4, 1024),
+            nn.Linear(128 * 1 * 1, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(inplace=True),
             nn.Linear(1024, 256),
@@ -194,9 +191,9 @@ class SVHNmodel(nn.Module):
         )
 
     def forward(self, input_data, alpha = 1.0):
-        input_data = input_data.expand(input_data.data.shape[0], 3, 28, 28)
+        input_data = input_data.expand(input_data.data.shape[0], 3, 32, 32)
         feature = self.feature(input_data)
-        feature = feature.view(-1, 64 * 4 * 4)
+        feature = feature.view(-1, 128 * 1 * 1)
         reverse_feature = ReverseLayerF.apply(feature, alpha)
         class_output = self.classifier(feature)
         domain_output = self.discriminator(reverse_feature)
