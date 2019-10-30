@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 _gsdata_
-*.ipynb
 
 # C extensions
 *.so
