@@ -32,7 +32,7 @@ A PyTorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
 | :------------------: | :------------: | :--------: | :-----------: |:-------------: |:-------------: |
 | Source Only          |   0.5225       |  0.5490    |  0.6420       | 0.             | 0.             |
 | DANN(paper)          |   0.7666       |  0.7385    |  0.7300       | 0.9109         | 0.7900         |
-| This Repo Source Only|   -            |  -         |  -            | 0.             | 0.             |
+| This Repo Source Only|   -            |  -         |  -            | 0.             | 0.7650         |
 | This Repo            |   0.8400       |  0.7339    |  0.6528       | 0.8200         | 0.6200         |
 
 ## Credit

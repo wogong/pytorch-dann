@@ -7,13 +7,13 @@ import torch
 sys.path.append('../')
 from models.model import GTSRBmodel
 from core.train import train_dann
-from utils.utils import get_data_loader, init_model, init_random_seed
+from utils.utils import get_data_loader, init_model, init_random_seed, init_weights
 
 class Config(object):
     # params for path
     model_name = "synsigns-gtsrb"
     model_base = '/home/wogong/models/pytorch-dann'
-    note = 'src-only-40-bn'
+    note = 'src-only-40-bn-init'
     model_root = os.path.join(model_base, model_name, note + '_' + datetime.datetime.now().strftime('%m%d_%H%M%S'))
     os.makedirs(model_root)
     config = os.path.join(model_root, 'config.txt')
@@ -75,6 +75,8 @@ tgt_data_loader_eval = get_data_loader(params.tgt_dataset, params.tgt_image_root
 
 # load dann model
 dann = init_model(net=GTSRBmodel(), restore=None)
+init_weights(dann)
+
 
 # train dann model
 print("Training dann model")

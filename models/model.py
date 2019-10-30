@@ -210,42 +210,43 @@ class GTSRBmodel(nn.Module):
         self.restored = False
 
         self.feature = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=96, kernel_size=(5, 5)),  # 36 ; 44
+            nn.Conv2d(in_channels=3, out_channels=96, kernel_size=(5, 5), stride=1, padding=2),  # 36 ; 44
             nn.BatchNorm2d(96),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),  # 18 ; 22
-            nn.Conv2d(in_channels=96, out_channels=144, kernel_size=(3, 3)),  # 16 ; 20
+            nn.Conv2d(in_channels=96, out_channels=144, kernel_size=(3, 3), stride=1, padding=1),  # 16 ; 20
             nn.BatchNorm2d(144),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),  # 8 ; 10
-            nn.Conv2d(in_channels=144, out_channels=256, kernel_size=(5, 5)),  # 4 ; 6
+            nn.Conv2d(in_channels=144, out_channels=256, kernel_size=(5, 5), stride=1, padding=2),  # 4 ; 6
             nn.BatchNorm2d(256),
-            nn.Dropout2d(),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),  # 2 ; 3
         )
 
         self.classifier = nn.Sequential(
-            nn.Linear(256 * 2 * 2, 512),
+            nn.Linear(256 * 5 * 5, 512),
             nn.BatchNorm1d(512),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
+            nn.Dropout(),
             nn.Linear(512, 43),
         )
 
         self.discriminator = nn.Sequential(
-            nn.Linear(256 * 2 * 2, 1024),
+            nn.Linear(256 * 5 * 5, 1024),
             nn.BatchNorm1d(1024),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
             nn.Linear(1024, 1024),
             nn.BatchNorm1d(1024),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
+            nn.Dropout(),
             nn.Linear(1024, 2),
         )
 
     def forward(self, input_data, alpha = 1.0):
         input_data = input_data.expand(input_data.data.shape[0], 3, 40, 40)
         feature = self.feature(input_data)
-        feature = feature.view(-1, 256 * 2 * 2)
+        feature = feature.view(-1, 256 * 5 * 5)
         reverse_feature = ReverseLayerF.apply(feature, alpha)
         class_output = self.classifier(feature)
         domain_output = self.discriminator(reverse_feature)

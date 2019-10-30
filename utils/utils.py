@@ -29,6 +29,7 @@ def init_weights(layer):
     layer_name = layer.__class__.__name__
     if layer_name.find("Conv") != -1:
         layer.weight.data.normal_(0.0, 0.02)
+        layer.bias.data.fill(0.0)
     elif layer_name.find("BatchNorm") != -1:
         layer.weight.data.normal_(1.0, 0.02)
         layer.bias.data.fill_(0)
