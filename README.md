@@ -22,9 +22,8 @@ A PyTorch implementation for paper *[Unsupervised Domain Adaptation by Backpropa
     - network structure proposed in the paper may be wrong for both 32x32 and 28x28 inputs
     - change last conv layer's filter to 4x4, get similar(actually higher) result
 - `GTSRBmodel()`
-    - not successful
 - `AlexModel`
-    - not successful, mainly due to the preprain model difference
+    - not successful, mainly due to the pretrained model difference
 
 ## Result
 
