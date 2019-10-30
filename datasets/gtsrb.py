@@ -1,4 +1,5 @@
-"""Dataset setting and data loader for GTSRB."""
+"""Dataset setting and data loader for GTSRB. Raw format and not use roi info.
+"""
 
 import os
 import torch
