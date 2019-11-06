@@ -6,20 +6,19 @@ from tensorboardX import SummaryWriter
 import torch
 sys.path.append('../')
 from models.model import GTSRBmodel
-from core.train import train_dann
+from core.train import train_src
 from utils.utils import get_data_loader, init_model, init_random_seed, init_weights
 
 class Config(object):
     # params for path
     model_name = "synsigns-gtsrb"
     model_base = '/home/wogong/models/pytorch-dann'
-    note = 'src-only-40-bn-init'
+    note = 'srconly'
     model_root = os.path.join(model_base, model_name, note + '_' + datetime.datetime.now().strftime('%m%d_%H%M%S'))
     os.makedirs(model_root)
     config = os.path.join(model_root, 'config.txt')
     finetune_flag = False
     lr_adjust_flag = 'simple'
-    src_only_flag = True
 
     # params for datasets and data loader
     batch_size = 128
@@ -70,15 +69,15 @@ init_random_seed(params.manual_seed)
 # load dataset
 src_data_loader = get_data_loader(params.src_dataset, params.src_image_root, params.batch_size, train=True)
 src_data_loader_eval = get_data_loader(params.src_dataset, params.src_image_root, params.batch_size, train=False)
+
 tgt_data_loader = get_data_loader(params.tgt_dataset, params.tgt_image_root, params.batch_size, train=True)
 tgt_data_loader_eval = get_data_loader(params.tgt_dataset, params.tgt_image_root, params.batch_size, train=False)
 
 # load dann model
 dann = init_model(net=GTSRBmodel(), restore=None)
-init_weights(dann)
-
+#init_weights(dann)
 
 # train dann model
 print("Training dann model")
 if not (dann.restored and params.dann_restore):
-    dann = train_dann(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader_eval, device, logger)
+    dann = train_src(dann, params, src_data_loader, tgt_data_loader, tgt_data_loader_eval, device, logger)
